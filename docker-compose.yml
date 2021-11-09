@@ -1,0 +1,22 @@
+version: "3"
+services:
+  tnt:
+    image: shnifer/tnt
+    networks:
+    - backnet
+  port:
+    image: shnifer/port
+    networks:
+    - backnet
+    ports:
+    - "80:80"
+    environment:
+      PORT_TNT_ADDR: "tnt:3301"
+  admin:
+    image: shnifer/flutter_admin
+    ports:
+    - "81:80"
+
+networks:
+  backnet:
+    driver: bridge
