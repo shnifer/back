@@ -9,7 +9,7 @@ local function if_nil_404(v, message, ...)
     return errors.not_found(message, ...)
 end
 
-local function simplify(t)
+local function flat_table(t)
     local simple = {}
     if not t then
         return simple
@@ -26,9 +26,9 @@ end
 
 function M.universal(req)
     req.total_path = table.copy(req.path)
-    req.simple_postform = simplify(req.postform)
-    req.simple_header = simplify(req.header)
-    req.simple_query = simplify(req.query)
+    req.simple_postform = flat_table(req.postform)
+    req.simple_header = flat_table(req.header)
+    req.simple_query = flat_table(req.query)
 
     local rt = {
         users = M.users,
@@ -107,7 +107,7 @@ function M.act(req)
         if not room_id then
             return errors.validate("need room_id in post form")
         end
-        return app.rooms:move_user(user_id, room_id)
+        return app.users:move(user_id, room_id)
     end
 end
 
@@ -119,6 +119,12 @@ function M.debug(req)
     end
     if first == "start" then
         return app.start()
+    end
+    if first == "pause" then
+        return app.world.pause()
+    end
+    if first == "resume" then
+        return app.world.resume()
     end
     if first == "stat" then
         return {

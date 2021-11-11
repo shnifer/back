@@ -8,13 +8,19 @@ M.validate_schema = {
     wounds = "number",
     stim = "number",
     waste = "number",
-    prof = "table"
+    room = "number",
+    tactic = "number",
+    engineer = "number",
+    operative = "number",
+    navigator = "number",
+    science = "number",
 }
 
 M.init_cfg = function (cfg)
     assert(cfg, "config should have users section")
     assert(cfg.default, "config should have users.default section")
     assert(cfg.job, "config should have users.job section")
+    cfg.start_room = cfg.start_room or 1
     cfg.job.ap_regen = cfg.job.ap_regen or 0
     cfg.job.stim_start = cfg.job.stim_start or 300
     cfg.job.stim_drop = cfg.job.stim_drop or 1
@@ -55,6 +61,29 @@ function M:add_def ()
     end
     self:space():insert{id, data}
     return data
+end
+
+function M:start()
+    self:modify_all_tx(function(user)
+        user.room = self.cfg.start_room
+        return user
+    end)
+end
+
+function M:get_roomers()
+    local users = self:get_all()
+    local roomers = {}
+    for _, user in ipairs(users) do
+        local room = user.room
+        roomers[room] = roomers[room] or {}
+        table.insert(roomers[room], user.id)
+        table.sort(roomers[room])
+    end
+    return roomers
+end
+
+function M:move(user_id, room_id)
+    return self:patch(user_id, {room = room_id})
 end
 
 return M

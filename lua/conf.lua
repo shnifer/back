@@ -17,6 +17,7 @@ box = {
 
 app = {
     users = {
+        start_room = 3,
         default = {
             name = "",
             max_ap = 400,
@@ -24,20 +25,25 @@ app = {
             wounds = 0,
             stim = 0,
             waste = 0,
-            prof = {},
+            room = 0,
+            tactic = 1,
+            engineer = 1,
+            operative = 1,
+            navigator = 1,
+            science = 1,
         },
         list = {
             {
                 name = "Алиса",
-                prof = {"captain", "navigator"},
+                tactic = 3,
             },
             {
                 name = "Боб",
-                prof = {"cargo"},
+                operative = 2,
+                engineer = 2,
             },
             {
                 name = "Карл",
-                prof = {"engineer"},
             }
         },
         job = {
@@ -53,7 +59,6 @@ app = {
             damage = 0,
             temperature = 25,
             cooler = 10,
-            roomers = {},
         },
         start_room = 1,
         list = {
