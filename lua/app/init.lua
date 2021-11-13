@@ -8,6 +8,7 @@ local app = {
     -- repos
     users = require('repo.users'),
     rooms = require('repo.rooms'),
+    targets = require('repo.random_targets'),
 
     -- other
     cron = require ('app.cron'),
@@ -47,19 +48,19 @@ end
 function app.destroy()
     log.info('app "game" destroy')
 
-    for k, mod in pairs(app) do if type(mod) == 'table' and mod.destroy ~= nil then mod.destroy() end end
+    for _, mod in pairs(app) do if type(mod) == 'table' and mod.destroy ~= nil then mod.destroy() end end
 end
 
 function app.reset()
     log.info('app "game" reset')
 
-    for k, mod in pairs(app) do if type(mod) == 'table' and mod.reset ~= nil then mod:reset() end end
+    for _, mod in pairs(app) do if type(mod) == 'table' and mod.reset ~= nil then mod:reset() end end
 end
 
 function app.start()
     log.info('app "game" start')
 
-    for k, mod in pairs(app) do if type(mod) == 'table' and mod.start ~= nil then mod:start() end end
+    for _, mod in pairs(app) do if type(mod) == 'table' and mod.start ~= nil then mod:start() end end
 end
 
 function app.get_handler(str)

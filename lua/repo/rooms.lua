@@ -1,7 +1,7 @@
 local M = require("package.new_space")("rooms")
 
 M.validate_schema = {
-    id = "number",
+    id = "int",
     name = "string",
     damage = "number",
     temperature = "number",

@@ -33,6 +33,7 @@ function M.universal(req)
     local rt = {
         users = M.users,
         rooms = M.rooms,
+        targets = M.targets,
         act   = M.act,
         debug = M.debug,
     }
@@ -91,6 +92,15 @@ function M.rooms(req)
         if number then
             return if_nil_404 (app.rooms:patch(number, req.simple_postform), "room{%d}", number)
         end
+    end
+end
+
+function M.targets(req)
+    if req.method == "GET" then
+        return app.targets:get_all()
+    end
+    if req.method =="POST" then
+        return app.targets:shuffle()
     end
 end
 

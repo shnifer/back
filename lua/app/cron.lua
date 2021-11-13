@@ -19,17 +19,17 @@ function M.init(cfg)
     M.cfg = cfg.cron
     assert(M.cfg, "config should have cron section")
     assert(M.cfg.jobs, "config should have cron.jobs section")
-    local gtime = app.world.gtime()
+    M:reset()
+    M.daemon = fiber.new(M._daemon)
+end
+
+function M:reset()
+    box.space.cron:truncate()
     for name, opts in pairs(M.cfg.jobs) do
         assert(opts.handler, "cron job "..name.." must have handler")
         local period = opts.period or 1
-        box.space.cron:upsert({name, gtime+period, gtime, period, opts.handler}, {
-            {"=", "period", period},
-            {"=", "handler", opts.handler},
-        })
+        box.space.cron:insert{name, 0, 0, period, opts.handler}
     end
-
-    M.daemon = fiber.new(M._daemon)
 end
 
 function M.destroy()

@@ -1,19 +1,19 @@
 local M = require("package.new_space")("users")
 
 M.validate_schema = {
-    id = "number",
+    id = "int",
     name = "string",
-    max_ap = "number",
-    cur_ap = "number",
-    wounds = "number",
+    max_ap = "int",
+    cur_ap = "int",
+    wounds = "int",
     stim = "number",
     waste = "number",
-    room = "number",
-    tactic = "number",
-    engineer = "number",
-    operative = "number",
-    navigator = "number",
-    science = "number",
+    room = "int",
+    tactic = "int",
+    engineer = "int",
+    operative = "int",
+    navigator = "int",
+    science = "int",
 }
 
 M.init_cfg = function (cfg)

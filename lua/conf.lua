@@ -86,12 +86,20 @@ app = {
             },
         }
     },
+    targets = {
+        count = 5,
+    },
     cron = {
         max_period = 1,
         min_period = 0.03,
         jobs = {
             users = {
-                handler = "users.cron"
+                handler = "users.cron",
+                period = 1,
+            },
+            targets = {
+                handler = "targets.cron",
+                period = 0.033,
             }
         }
     },
