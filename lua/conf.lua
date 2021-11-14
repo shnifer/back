@@ -102,6 +102,23 @@ app = {
     targets = {
         count = 5,
     },
+    ship = {
+        default = {
+            id = 1,
+            shield_forward = 100,
+            shield_left = 100,
+            shield_right = 100,
+            shield_back = 100,
+
+            structure_damage = 0,
+            structure_max = 300,
+            turn_speed = 1,
+            course = 0,
+            accelerate = 1,
+            speed = 0,
+            max_speed = 0,
+        },
+    },
     cron = {
         max_period = 1,
         min_period = 0.03,

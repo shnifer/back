@@ -9,6 +9,7 @@ local app = {
     users = require('repo.users'),
     rooms = require('repo.rooms'),
     targets = require('repo.random_targets'),
+    ship = require('repo.ship'),
 
     -- other
     cron = require ('app.cron'),

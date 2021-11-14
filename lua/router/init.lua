@@ -34,6 +34,7 @@ function M.universal(req)
         users = M.users,
         rooms = M.rooms,
         targets = M.targets,
+        ship = M.ship,
         act   = M.act,
         debug = M.debug,
     }
@@ -101,6 +102,15 @@ function M.targets(req)
     end
     if req.method =="POST" then
         return app.targets:shuffle()
+    end
+end
+
+function M.ship(req)
+    if req.method == "GET" then
+        return if_nil_404 (app.ship:get(1), "ship{1}")
+    end
+    if req.method =="POST" then
+        return if_nil_404 (app.ship:patch(1, req.simple_postform), "room{1}")
     end
 end
 
