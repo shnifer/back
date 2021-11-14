@@ -59,6 +59,19 @@ app = {
             damage = 0,
             temperature = 25,
             cooler = 10,
+            damage_amplify = 1,
+            ammo = 0,
+            energy = 0,
+            cpu = 0,
+            fuel = 0,
+            max_ammo = 100,
+            max_energy = 100,
+            max_cpu = 100,
+            max_fuel = 100,
+            inc_ammo = 0,
+            inc_energy = 0,
+            inc_cpu = 0,
+            inc_fuel = 0,
         },
         start_room = 1,
         list = {
@@ -95,6 +108,10 @@ app = {
         jobs = {
             users = {
                 handler = "users.cron",
+                period = 1,
+            },
+            roooms = {
+                handler = "rooms.cron",
                 period = 1,
             },
             targets = {

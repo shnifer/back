@@ -127,6 +127,10 @@ function M.debug(req)
     if first == "reset" then
         return app.reset()
     end
+    if first == "hardreset" then
+        package.reload()
+        return app.reset()
+    end
     if first == "start" then
         return app.start()
     end
@@ -139,6 +143,7 @@ function M.debug(req)
     if first == "stat" then
         return {
             world = app.world.stat(),
+            cron = app.cron.daemon.status(),
         }
     end
 

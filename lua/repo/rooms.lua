@@ -6,6 +6,22 @@ M.validate_schema = {
     damage = "number",
     temperature = "number",
     cooler = "number",
+    damage_amplify = "number",
+
+    ammo = "number",
+    energy = "number",
+    cpu = "number",
+    fuel = "number",
+
+    max_ammo = "number",
+    max_energy = "number",
+    max_cpu = "number",
+    max_fuel = "number",
+
+    inc_ammo = "number",
+    inc_energy = "number",
+    inc_cpu = "number",
+    inc_fuel = "number",
 }
 
 M.init_cfg = function (cfg)
@@ -36,6 +52,15 @@ function M:get_all(id)
         v.roomers = roomers[v.id] or {}
     end
     return got
+end
+
+function M:cron_update(data, dt)
+    local dm = dt/60
+    data.ammo = math.min(data.ammo + data.inc_ammo * dm, data.max_ammo)
+    data.energy = math.min(data.energy + data.inc_energy * dm, data.max_energy)
+    data.cpu = math.min(data.cpu + data.inc_cpu * dm, data.max_cpu)
+    data.fuel = math.min(data.fuel + data.inc_fuel * dm, data.max_fuel)
+    return data
 end
 
 return M

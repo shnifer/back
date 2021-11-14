@@ -41,43 +41,47 @@ M._daemon = function ()
     local min_period = M.cfg.min_period or 0.1 -- перепроверяем не чаще, чем
 
     while true do
-        local job = box.space.cron.index.next:select({0}, {iterator = 'ge', limit = 1})[1]
-        if not job then
-            fiber.sleep(max_period) -- no job at all, but may be added later
-            goto continue
-        end
-        local gtime = app.world.gtime()
-        if gtime < job.next then
-            local wait = job.next-gtime
-            if wait>max_period then
-                wait = max_period
-            end
-            if wait<min_period then
-                wait = min_period
-            end
-            fiber.sleep(wait)
-            goto continue
-        end
-
-        local next = job.next + job.period
-        box.space.cron:update({job.name}, {
-            {"=", "next", next},
-            {"=", "last", gtime},
-        })
-        local dt = gtime - job.last
-        local handler = app.get_handler(job.handler)
-        if not handler then
-            log.error("no handler found for job %s, handler %s", job.name, job.handler)
-            goto continue
-        end
-
-        local ok, got = pcall(handler , dt)
-        if not ok then
-            log.error("error calling cron job %s (handler=%s), err: %s", job.name, job.handler, got)
-        end
-        fiber.yield()
-        ::continue::
+        pcall(M._daemon_tick, max_period, min_period)
     end
 end
+
+M._daemon_tick = function (max_period, min_period)
+    local job = box.space.cron.index.next:select({0}, {iterator = 'ge', limit = 1})[1]
+    if not job then
+        fiber.sleep(max_period) -- no job at all, but may be added later
+        return
+    end
+    local gtime = app.world.gtime()
+    if gtime < job.next then
+        local wait = job.next-gtime
+        if wait>max_period then
+            wait = max_period
+        end
+        if wait<min_period then
+            wait = min_period
+        end
+        fiber.sleep(wait)
+        return
+    end
+
+    local next = job.next + job.period
+    box.space.cron:update({job.name}, {
+        {"=", "next", next},
+        {"=", "last", gtime},
+    })
+    local dt = gtime - job.last
+    local handler = app.get_handler(job.handler)
+    if not handler then
+        log.error("no handler found for job %s, handler %s", job.name, job.handler)
+        return
+    end
+
+    local ok, got = pcall(handler , dt)
+    if not ok then
+        log.error("error calling cron job %s (handler=%s), err: %s", job.name, job.handler, got)
+    end
+    fiber.yield()
+end
+
 
 return M
