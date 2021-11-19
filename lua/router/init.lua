@@ -94,6 +94,8 @@ function M.rooms(req)
             return if_nil_404 (app.rooms:patch(number, req.simple_postform), "room{%d}", number)
         end
     end
+
+    return errors.method_not_found({req.method, req.total_path})
 end
 
 function M.targets(req)
@@ -103,6 +105,8 @@ function M.targets(req)
     if req.method =="POST" then
         return app.targets:shuffle()
     end
+
+    return errors.method_not_found({req.method, req.total_path})
 end
 
 function M.ship(req)
@@ -129,6 +133,8 @@ function M.act(req)
         end
         return app.users:move(user_id, room_id)
     end
+
+    return errors.method_not_found({req.method, req.total_path})
 end
 
 function M.debug(req)
@@ -155,6 +161,15 @@ function M.debug(req)
             world = app.world.stat(),
             cron = app.cron.daemon.status(),
         }
+    end
+    if first == "config" then
+        if req.method == "GET" then
+            return app.cfg
+        end
+        if req.method == "POST" then
+            app.set_cfg(req.body);
+            return
+        end
     end
 
     return errors.method_not_found({req.method, req.total_path})

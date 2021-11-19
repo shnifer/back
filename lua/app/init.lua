@@ -1,4 +1,5 @@
 local log = require 'log'
+local json = require 'json'
 local contains = require('package.helpers').contains
 
 local app = {
@@ -79,6 +80,12 @@ function app.get_handler(str)
     end
     return p
 end
+
+function app.set_cfg(cfg_str)
+    assert(type(cfg_str)=="string")
+    local new_cfg = json.decode(cfg_str)
+end
+
 
 package.reload:register(app)
 rawset(_G, 'app', app)
